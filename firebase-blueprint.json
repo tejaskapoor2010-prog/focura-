@@ -1,0 +1,80 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Student user profile information",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "avatar": { "type": "string" },
+        "stream": { "type": "string", "enum": ["science", "commerce", "arts"] },
+        "targetExam": { "type": "string" },
+        "dailyGoalMinutes": { "type": "number" },
+        "streakDays": { "type": "number" },
+        "lastActiveDate": { "type": "string" },
+        "provider": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "subscription": {
+          "type": "object",
+          "description": "User tier subscription and demo authorization state"
+        }
+      },
+      "required": ["id", "email", "name", "stream"]
+    },
+    "StudySession": {
+      "title": "StudySession",
+      "description": "A single focus study session with CV telemetry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "startTime": { "type": "number" },
+        "endTime": { "type": "number" },
+        "durationSeconds": { "type": "number" },
+        "focusedSeconds": { "type": "number" },
+        "focusScore": { "type": "number" },
+        "stream": { "type": "string" },
+        "subject": { "type": "string" },
+        "subTopic": { "type": "string" },
+        "distractionEvents": { "type": "array" },
+        "timeline": { "type": "array" }
+      },
+      "required": ["id", "userId", "startTime", "durationSeconds", "focusScore", "subject"]
+    },
+    "RevisionCard": {
+      "title": "RevisionCard",
+      "description": "Flashcard or quiz card saved for spaced repetition",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "stream": { "type": "string" },
+        "subject": { "type": "string" },
+        "topic": { "type": "string" },
+        "question": { "type": "string" },
+        "answer": { "type": "string" },
+        "keyConcepts": { "type": "array" },
+        "masteryLevel": { "type": "string" },
+        "nextReviewDate": { "type": "string" },
+        "repetitions": { "type": "number" }
+      },
+      "required": ["id", "userId", "subject", "question", "answer"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile document owned by the student"
+    },
+    "/users/{userId}/sessions/{sessionId}": {
+      "schema": "StudySession",
+      "description": "Study sessions and CV distraction telemetry logged by the student"
+    },
+    "/users/{userId}/revisions/{cardId}": {
+      "schema": "RevisionCard",
+      "description": "Spaced repetition revision cards and quiz review items"
+    }
+  }
+}
